@@ -1,5 +1,6 @@
 package edu.co.icesi.chatexample.view.activities
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -10,20 +11,30 @@ import edu.co.icesi.chatexample.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by lazy{
+    private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val viewModel:MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        requestPermissions(arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ), 11)
+
         binding.chatRV.adapter = ChatAdapter()
         binding.chatRV.layoutManager = LinearLayoutManager(this)
         binding.chatRV.setHasFixedSize(true)
 
         viewModel.subscribeToMessages()
 
+
     }
+
+
+
 }

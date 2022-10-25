@@ -8,11 +8,11 @@ import com.google.firebase.ktx.Firebase
 
 class MainViewModel:ViewModel() {
 
+
     fun subscribeToMessages(){
         Firebase.firestore
             .collection("users")
             .addSnapshotListener{data, e ->
-
                 for(docChanges in data?.documentChanges!!){
                     val user = docChanges.document.toObject(User::class.java)
                     Log.e(">>>","${user.id} ${user.name} ${docChanges.type.name}")
