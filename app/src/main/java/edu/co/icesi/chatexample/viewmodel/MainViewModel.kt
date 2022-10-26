@@ -1,6 +1,8 @@
 package edu.co.icesi.chatexample.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ktx.firestore
@@ -16,6 +18,10 @@ class MainViewModel : ViewModel() {
 
     private var userID = "we9geEozrePhlCrfiXon"
     private var otherUserID = "ywtARYsxfWfHciOJR6f8"
+
+    private val arrayMessages = arrayListOf<Message>()
+    private val _messages:MutableLiveData< ArrayList<Message> > = MutableLiveData(arrayListOf())
+    val messages:LiveData< ArrayList<Message> > get() = _messages
 
 
     fun subscribeToMessages() {
@@ -39,8 +45,11 @@ class MainViewModel : ViewModel() {
                     if(doc.type.name == "ADDED"){
                         val msg = doc.document.toObject(Message::class.java)
                         Log.e(">>>", msg.message)
+                        arrayMessages.add(msg)
+                        _messages.value = arrayMessages
                     }
                 }
+
             }
     }
 
