@@ -24,12 +24,18 @@ class MainViewModel:ViewModel() {
 
     fun test(){
         Firebase.firestore
-            .collection("users")
-            .addSnapshotListener{data, e ->
-                for(docChanges in data?.documentChanges!!){
-                    val user = docChanges.document.toObject(User::class.java)
-                    Log.e(">>>","${user.id} ${user.name} ${docChanges.type.name}")
+            .collection("messages")
+            .document(chat.id)
+            .collection("messages").addSnapshotListener{ data, e ->
+                for(doc in data!!.documentChanges){
+                    if(doc.type.name == "ADDED"){
+                        val msg = doc.document.toObject(Message::class.java)
+                        Log.e(">>>", msg.message)
+                        arrayMessages.add(msg)
+                        _messages.value = arrayMessages
+                    }
                 }
+
             }
     }
     fun subscribeToMessages(){

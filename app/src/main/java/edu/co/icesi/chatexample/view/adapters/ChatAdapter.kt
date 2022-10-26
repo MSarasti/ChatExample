@@ -11,13 +11,14 @@ import edu.co.icesi.chatexample.databinding.OwnMessageBinding
 
 class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    //Puedo acceder a mi ID usando Firebase.auth.currentUser.uid
+    private var userID = "we9geEozrePhlCrfiXon"
+
+
     private val messages = ArrayList<Message>()
 
     init {
-        messages.add(Message("23r3f3r", "Hola mundo", 1212323, "Alfa"))
-        messages.add(Message("hj32342", "¿Hola cómo estas?", 1212323, "Beta"))
-        messages.add(Message("23r3f3r", "Bien muchas gracias", 1212323, "Alfa"))
-        messages.add(Message("hj32342", "Ah, bueno", 1212323, "Beta"))
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -36,7 +37,7 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (messages[position].authorID == "Alfa") {
+        if (messages[position].authorID == userID) {
             return 0;
         }else{
             return 1;

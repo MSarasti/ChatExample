@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.co.icesi.chatexample.databinding.ActivityMainBinding
+import edu.co.icesi.chatexample.model.Message
 import edu.co.icesi.chatexample.view.ChatAdapter
 import edu.co.icesi.chatexample.viewmodel.MainViewModel
 
@@ -39,7 +40,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
 }
