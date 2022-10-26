@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val viewModel: MainViewModel by viewModels()
-
+    private val adapter = ChatAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +26,18 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_EXTERNAL_STORAGE
         ), 11)
 
-        binding.chatRV.adapter = ChatAdapter()
+        binding.chatRV.adapter = adapter
         binding.chatRV.layoutManager = LinearLayoutManager(this)
         binding.chatRV.setHasFixedSize(true)
 
         viewModel.subscribeToMessages()
 
-
+        viewModel.messages.observe(this) {
+            if(it.isNotEmpty()){
+                val m = it.last()
+                adapter.addMessage(m)
+            }
+        }
     }
 
 

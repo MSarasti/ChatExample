@@ -36,7 +36,7 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (messages[position].authorId == "Alfa") {
+        if (messages[position].authorID == "Alfa") {
             return 0;
         }else{
             return 1;
@@ -59,6 +59,11 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return messages.size
+    }
+
+    fun addMessage(m: Message) {
+        messages.add(m)
+        notifyItemInserted(messages.lastIndex)
     }
 }
 
