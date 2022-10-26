@@ -2,25 +2,58 @@ package edu.co.icesi.chatexample.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import edu.co.icesi.chatexample.model.Message
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
-class MainViewModel:ViewModel() {
+class MainViewModel : ViewModel() {
+
+    private var userID = "we9geEozrePhlCrfiXon"
+    private var otherUserID = "ywtARYsxfWfHciOJR6f8"
 
 
-    fun subscribeToMessages(){
+    fun subscribeToMessages() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = Firebase.firestore.collection("chats")
+                .document(userID).collection("rooms")
+                .whereEqualTo("friendID", otherUserID).get().await()
+            for (doc in result.documents) {
+                val chat = doc.toObject(Chat::class.java)
+                withContext(Dispatchers.Main){subscribeRealTimeMessages(chat!!)}
+            }
+        }
+    }
+
+    fun subscribeRealTimeMessages(chat:Chat){
         Firebase.firestore
-            .collection("users")
-            .addSnapshotListener{data, e ->
-                for(docChanges in data?.documentChanges!!){
-                    val user = docChanges.document.toObject(User::class.java)
-                    Log.e(">>>","${user.id} ${user.name} ${docChanges.type.name}")
+            .collection("messages")
+            .document(chat.id)
+            .collection("messages").addSnapshotListener{ data, e ->
+                for(doc in data!!.documentChanges){
+                    if(doc.type.name == "ADDED"){
+                        val msg = doc.document.toObject(Message::class.java)
+                        Log.e(">>>", msg.message)
+                    }
                 }
             }
     }
+
 }
-data class User(
+
+
+
+data class Chat(
     val id:String = "",
-    val name:String = ""
+    val members:ArrayList<String> = arrayListOf()
+)
+
+data class User(
+    val id: String = "",
+    val name: String = ""
 )

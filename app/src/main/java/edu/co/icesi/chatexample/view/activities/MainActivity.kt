@@ -22,16 +22,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        requestPermissions(arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ), 11)
-
         binding.chatRV.adapter = ChatAdapter()
         binding.chatRV.layoutManager = LinearLayoutManager(this)
         binding.chatRV.setHasFixedSize(true)
 
         viewModel.subscribeToMessages()
-
 
     }
 
